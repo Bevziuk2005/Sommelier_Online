@@ -154,16 +154,34 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_http_methods
 
+from django.shortcuts import get_object_or_404, redirect
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import AnonymousUser
+
+
 @login_required
-@require_http_methods(["POST"])  # Adjust HTTP method as needed
+@require_POST  # Ensure only POST requests are accepted
 def favorite(request, pk, site):
     bottle = get_object_or_404(Bottle, pk=pk)
-    Favourites.objects.create(user=request.user, bottle=bottle)
+
+    # Determine user_id based on authentication status
+    if request.user.is_authenticated:
+        user_id = request.user.id
+    else:
+        # If user is anonymous, assign a default value (e.g., 0)
+        user_id = 0
+
+    # Create Favourites object with determined user_id
+    Favourites.objects.create(user_id=user_id, bottle=bottle)
+
+    # Handle redirection based on 'site' parameter
     urls = site.split('/')
     url = [url for url in urls if url != '']
     if len(url) == 2:
         return redirect('program_web:search')
-    return redirect('program_web:'+urls[-1])
+    return redirect('program_web:' + urls[-1])
+
 
 """
 def favorite(request, pk, site):
