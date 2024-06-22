@@ -14,6 +14,7 @@ from pathlib import Path
 import dj_database_url
 import environ
 
+import Sommelier_Online_Project.asgi
 
 env = environ.Env()
 environ.Env.read_env()
@@ -33,10 +34,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'https://sommelier-online.onrender.com', '0.0.0.0']
-
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'https://sommelier-online.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://sommelier-online.onrender.com']
 
 # Application definition
 
@@ -140,3 +141,4 @@ LOGOUT_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'program_web.MyUser'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+ASGI_APPLICATION = "Sommelier_Online_Project.asgi.application"
