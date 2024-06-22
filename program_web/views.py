@@ -148,7 +148,8 @@ def search(request):
             if i in favorite_pk:
                 dicts[i] = True
 
-    return render(request, 'program_web\\search.html', {'form': form, 'results': results, 'dicts': dicts})
+    return render(request, 'program_web/search.html', {'form': form, 'results': results, 'dicts': dicts})
+
 
 def favorite(request, pk, site):
     bottle = Bottle.objects.get(pk=pk)
