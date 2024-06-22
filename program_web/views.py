@@ -150,7 +150,22 @@ def search(request):
 
     return render(request, 'program_web/search.html', {'form': form, 'results': results, 'dicts': dicts})
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
+from django.views.decorators.http import require_http_methods
 
+@login_required
+@require_http_methods(["POST"])  # Adjust HTTP method as needed
+def favorite(request, pk, site):
+    bottle = get_object_or_404(Bottle, pk=pk)
+    Favourites.objects.create(user=request.user, bottle=bottle)
+    urls = site.split('/')
+    url = [url for url in urls if url != '']
+    if len(url) == 2:
+        return redirect('program_web:search')
+    return redirect('program_web:'+urls[-1])
+
+"""
 def favorite(request, pk, site):
     bottle = Bottle.objects.get(pk=pk)
     Favourites.objects.create(user=request.user, bottle=bottle)
@@ -159,7 +174,7 @@ def favorite(request, pk, site):
     if len(url) == 2:
         return redirect('program_web:search')
     return redirect('program_web:'+urls[-1])
-
+"""
 
 def user_favorites(request):
     favorites = Favourites.objects.filter(user=request.user)
