@@ -1,0 +1,58 @@
+{% extends 'program_web/bases.html' %}
+{% load static %}
+
+{% block title %}Головна{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'program_web/css/search.css' %}">
+
+    <div class="inform1">Ви можете здійснювати пошук за українськими та англійськими назвами вин, а також за їхнім поєднанням з стравами.</div>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Search</button>
+    </form>
+
+    <div>
+        {% if results %}
+            <div class="container">
+                <div class="row">
+                    {% for result in results %}
+                        <div class="col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>{{ result.name_ua }} ({{ result.name_eng }})</h4>
+                                    {% if user.is_authenticated %}
+                                        {% if result.pk in dicts %}
+                                            <div class="in_favorite">Додано</div>
+                                        {% else %}
+                                            <button class="add">
+                                                <a href="{% url 'program_web:favorite' result.pk request.build_absolute_uri %}">Додати</a>
+                                            </button>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div class="card-body">
+                                    <div class="info-row">
+                                        <div class="left">
+                                            <b>Країна: </b>{{ result.country }}
+                                        </div>
+                                        <div class="right">
+                                            <b>Вид: </b>{{ result.kind }}
+                                        </div>
+                                    </div>
+                                    <p><b>Домінуючі ноти: </b>{{ result.dominant_notes }}</p>
+                                    <p><b>Ідеально поєднується з: </b>{{ result.taste }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class="inform2">Нічого не знайдено.</div>
+        {% endif %}
+    </div>
+
+{% endblock %}

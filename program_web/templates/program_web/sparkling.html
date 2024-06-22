@@ -1,0 +1,62 @@
+{% extends 'program_web/bases.html' %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% load static %}
+
+{% block title %}Ігристе{% endblock %}
+
+{% block content %}
+
+    <div class="img">
+
+        <link rel="stylesheet" href="{% static 'program_web/css/sparkling.css' %}">
+
+        <h2>Історія ігристого вина</h2>
+        <img src="{% static 'program_web/png/sparkling1.jpg' %}" style="margin-top: 10px;margin-bottom: 10px;margin-right: 10px;width: 25%;" class="float-start rounded-circle">
+        <p class="p">Ігристе вино має довгу та багату історію, яка почалася у Франції в XVII столітті. Легенда стверджує, що французький монах Дом Періньйон випадково відкрив метод виробництва ігристого вина, коли спробував усунути недоліки у вині. Насправді ж, процес природного бродіння в пляшках був відомий і раніше, але саме у Шампані цей метод був доведений до досконалості.</p>
+        <p class="p">У XVIII столітті технології вдосконалювалися, і французьке шампанське почало завойовувати популярність по всій Європі. Особливо воно було улюбленим напоєм при королівських дворах. Шампанське стало символом розкоші та урочистості, і донині залишається найвідомішим видом ігристого вина.</p>
+
+        <hr>
+
+        <h2>Виготовлення</h2>
+        <p class="p">Процес виробництва ігристого вина значно відрізняється від виробництва звичайного вина. Основні етапи включають:</p>
+        <img src="{% static 'program_web/png/sparkling2.jpg' %}" style="margin-top: 10px;margin-bottom: 10px;margin-right: 10px;width: 25%;" class="float-end img-thumbnail">
+        <ul>
+            <li class="li"><strong>Первинне Бродіння:</strong> Як і у випадку з тихим вином, все починається з ферментації виноградного соку в алкоголь. Використовуються спеціальні сорти винограду, такі як Шардоне, Піно Нуар та Піно Меньє.</li>
+            <li class="li"><strong>Купажування:</strong> Це змішування базових вин для створення бажаного смакового профілю. Купажування дозволяє виробникам створювати консистентний смак з року в рік.</li>
+            <li class="li"><strong>Вторинне Бродіння:</strong> Цей етап відбувається вже у пляшках, куди додають дріжджі та цукор. Пляшки закривають і зберігають у прохолодних підвалах. Дріжджі споживають цукор, утворюючи вуглекислий газ, що й створює бульбашки.</li>
+            <li class="li"><strong>Ремуаж та Дегоржаж:</strong> Після вторинного бродіння пляшки поступово повертають горловиною донизу для збирання осаду дріжджів у шийці пляшки (ремуаж). Потім шийку заморожують, і осад видаляють під тиском (дегоржаж).</li>
+            <li class="li"><strong>Дозаж:</strong> Додається невелика кількість винного сиропу (лікеру), щоб компенсувати втрати вина під час дегоржажу та для налаштування солодкості напою.</li>
+            <li class="li"><strong>Фінальна Закупорка:</strong> Після додавання сиропу пляшки закупорюють корками та металевими мюзле.</li>
+        </ul>
+
+    </div>
+
+    <div class="container">
+        <div class="row">
+            {% for bottle in bottles %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>{{ bottle.name_ua }} ( {{ bottle.name_eng }} )</h4>
+                            {% if user.is_authenticated %}
+                                {% if bottle.pk in dicts %}
+                                    <div class="in_favorite">Додано</div>
+                                {% else %}
+                                    <button class="add">
+                                        <a href="{% url 'program_web:favorite' bottle.pk request.build_absolute_uri %}">Додати</a>
+                                    </button>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <p><b>Країна: </b>{{ bottle.country }}</p>
+                            <p><b>Домінуючі ноти: </b>{{ bottle.dominant_notes }}</p>
+                            <p><b>Ідеально поєднується з:</b> {{ bottle.taste }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

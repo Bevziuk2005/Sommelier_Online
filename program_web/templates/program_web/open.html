@@ -1,0 +1,12 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'program_web/css/bootstrap.css' %}">
+<link rel="stylesheet" href="{% static 'program_web/css/open.css' %}">
+<title>Вхід</title>
+<body>
+    <div class="container">
+        <div class="registration-box">
+            <a href={% url 'program_web:login' %}><button>Вхід</button></a>
+            <a href={% url 'program_web:registration' %}><button>Реєстрація</button></a>
+        </div>
+    </div>
+</body>

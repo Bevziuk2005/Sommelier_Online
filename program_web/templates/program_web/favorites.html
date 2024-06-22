@@ -1,0 +1,44 @@
+{% extends 'program_web/bases.html' %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% load static %}
+
+{% block title %}Обране{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'program_web/css/favorites.css' %}">
+
+<div>
+    {% if bottles %}
+        <div class="container">
+            <div class="row">
+                {% for bottle in bottles %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>{{ bottle.name_ua }} ( {{ bottle.name_eng }} )</h4>
+                                <button class="remove">
+                                    <a href="{% url 'program_web:remove_favorite' bottle.pk %}">Видалити</a>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="info-row">
+                                    <div class="left">
+                                        <b>Країна: </b>{{ bottle.country }}
+                                    </div>
+                                    <div class="right">
+                                        <b>Вид: </b>{{ bottle.kind }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </div>
+                                </div>
+                                <p><b>Домінуючі ноти: </b>{{ bottle.dominant_notes }}</p>
+                                <p><b>Ідеально поєднується з:</b> {{ bottle.taste }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <div class="inform">У вас ще немає обраного.</div>
+    {% endif %}
+</div>
+{% endblock %}

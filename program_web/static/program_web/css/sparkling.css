@@ -1,0 +1,52 @@
+.img {
+    overflow: hidden;
+}
+
+h2 {
+    margin-left: 7rem
+}
+.p, .li {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.card {
+    background: #F2D7A7;
+    margin-left: 4px;
+    margin-right: 4px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.card-header {
+    background: #F2D600 ;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.card-body {
+    padding: 16px;
+}
+
+
+.add {
+    background: #d54242;
+    color: #FEE6E6;
+    border: 1px solid #000000;
+    padding: 2px 6px;
+    margin-left: 15px;
+    cursor: pointer;
+    font-size: 15px;
+    width: 20%;
+    border-radius: 20px;
+}
+.add a {
+    color: #FEE6E6;
+    text-decoration: none;
+}
+
+.in_favorite {
+    margin-left: 15px;
+    color: black;
+}
