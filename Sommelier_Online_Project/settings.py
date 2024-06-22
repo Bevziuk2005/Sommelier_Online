@@ -86,11 +86,14 @@ WSGI_APPLICATION = 'Sommelier_Online_Project.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default=str(env('DATABASE_URL')),
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': str(env("ENGINE")),
+        'NAME': str(env("NAME")),
+        'USER': str(env("USER")),
+        'PASSWORD': str(env("PASSWORD")),
+        'HOST': str(env("HOST")),
+        'PORT': str(env("PORT"))
+    }
 }
 
 
