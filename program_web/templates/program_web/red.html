@@ -7,31 +7,6 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'program_web/css/red.css' %}">
 
-<div class="img">
-    <h2>Історія червоного вина</h2>
-    <img src="{% static 'program_web/png/red1.jpg' %}" style="margin-top: 5px;margin-bottom: 5px;margin-right: 20px;margin-left: 10px; width: 25%;" class="float-start rounded-circle">
-    <p class="p">Червоне вино - це не лише напій, а справжнє мистецтво, яке розкриває перед нами світ смаку, аромату та культури. Його історія та виробництво свідчать про величезний внесок у світову кулінарію та наше задоволення. Завдяки різноманіттю смаків та унікальним властивостям червоне вино залишається популярним напоєм по всьому світу.</p>
-    <p class="p">Історія виробництва вина сягає глибокої давнини. Перші згадки про виноград і вино знаходяться в давньогрецьких та давньоримських міфах і легендах. Вина вважалися напоями богів, а сам процес їх виготовлення був об'єктом особливого обряду.</p>
-    <hr>
-    <h2>Особливості</h2>
-    <ol>
-        <li><strong>Смак та аромат:</strong> Червоне вино може бути дуже різноманітним за смаком і ароматом.</li>
-        <li><strong>Колір:</strong> Відтінки червоного вина можуть варіюватися від світло-рожевого до темно-фіолетового.</li>
-        <img src="{% static 'program_web/png/red2.jpg' %}" style="margin-top: 5px;margin-bottom: 5px;margin-right: 20px;margin-left: 10px; width: 28%;" class="float-end rounded">
-        <li><strong>Корисні властивості:</strong> Червоне вино містить антиоксиданти, які корисні для серця, поліфеноли та інші речовини.</li>
-        <li><strong>Парфумерні якості:</strong> Вино часто характеризується не лише смаком, але й ароматом.</li>
-    </ol>
-    <hr>
-    <h2>Виготовлення</h2>
-    <ol>
-        <li><strong>Збір винограду:</strong> Виноград для червоного вина зазвичай збирають вручну.</li>
-        <li><strong>Мацерація:</strong> Після збору винограду він розміщується в спеціальних ємностях для мацерації.</li>
-        <li><strong>Ферментація:</strong> Суміш соку та шкірок винограду переходить процес ферментації.</li>
-        <li><strong>Витримка:</strong> Після ферментації вино переливають в дубові бочки або нержавіючі ємності для витримки.</li>
-        <li><strong>Фінальна обробка та розлив:</strong> Наприкінці витримки вино фільтрують та розливають у пляшки.</li>
-    </ol>
-</div>
-
 <div class="container">
     <div class="row">
         {% for bottle in bottles %}
@@ -40,13 +15,13 @@
                 <div class="card-header">
                     <h4>{{ bottle.name_ua }} ( {{ bottle.name_eng }} )</h4>
                     {% if user.is_authenticated %}
-                    {% if bottle.pk in dicts %}
-                    <div class="in_favorite">Додано</div>
-                    {% else %}
-                    <button class="add">
-                        <a href="{% url 'program_web:favorite' bottle.pk request.get_full_path %}">Додати</a>
-                    </button>
-                    {% endif %}
+                        {% if dicts|get:bottle.pk %}
+                            <div class="in_favorite">Додано</div>
+                        {% else %}
+                            <button class="add">
+                                <a href="{% url 'program_web:favorite' bottle.pk request.get_full_path %}">Додати</a>
+                            </button>
+                        {% endif %}
                     {% endif %}
                 </div>
                 <div class="card-body">
