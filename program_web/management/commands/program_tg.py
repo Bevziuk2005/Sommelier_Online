@@ -38,7 +38,7 @@ def send_welcome(message):
     feedback_button = telebot.types.KeyboardButton('Залишити відгук')
     projects_button = telebot.types.KeyboardButton('Проекти')
     markup.add(feedback_button, projects_button)
-    bot.send_message(message.chat.id, "Вітаю!\nЯ телеграм бот, проекту 'Онлайн Сомільє'\nБудь-ласка оберіть функцію.", reply_markup=markup)
+    bot.send_message(message.chat.id, "Вітаю!\nЯ телеграм бот, проекту 'Онлайн Сомельє'\nБудь-ласка оберіть функцію.", reply_markup=markup)
     bot.set_state(message.from_user.id, UserState.WELCOME)
 
 
@@ -56,7 +56,7 @@ def handle_buttons(message):
 
         elif message.text == 'Проекти':
             markup = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-            project_online_sommilie_button = telebot.types.KeyboardButton('Онлайн Сомільє')
+            project_online_sommilie_button = telebot.types.KeyboardButton('Онлайн Сомельє')
             back_button = telebot.types.KeyboardButton('Назад')
             markup.add(project_online_sommilie_button, back_button)
             bot.send_message(message.chat.id, "Проекти", reply_markup=markup)
@@ -90,25 +90,25 @@ def handle_buttons(message):
             send_welcome(message)
 
     elif state == UserState.PROJECTS:
-        if message.text == 'Онлайн Сомільє':
+        if message.text == 'Онлайн Сомельє':
             markup = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
             git_hub_button = telebot.types.KeyboardButton('GitHub проекта')
             site_button = telebot.types.KeyboardButton('Посилання на проект')
             project_info_button = telebot.types.KeyboardButton('Про проект')
             back_button = telebot.types.KeyboardButton('Назад')
             markup.add(git_hub_button, site_button, project_info_button, back_button)
-            bot.send_message(message.chat.id, "Онлайн Сомільє", reply_markup=markup)
+            bot.send_message(message.chat.id, "Онлайн Сомельє", reply_markup=markup)
             bot.set_state(message.from_user.id, UserState.ONLINE_SOMMILIE)
         elif message.text == 'Назад':
             send_welcome(message)
 
     elif state == UserState.ONLINE_SOMMILIE:
         if message.text == 'GitHub проекта':
-            bot.send_message(message.chat.id, "Я посилання на репозиторій.")
+            bot.send_message(message.chat.id, "https://github.com/Bevziuk2005/Sommelier_Online.git")
         elif message.text == 'Посилання на проект':
-            bot.send_message(message.chat.id, "Я посилання на сайт")
+            bot.send_message(message.chat.id, "https://sommelier-online.onrender.com")
         elif message.text == 'Про проект':
-            bot.send_message(message.chat.id, "Зараз буде інфа.")
+            bot.send_message(message.chat.id, "Сайт пропонує користувачам можливість отримати професійні рекомендації щодо вибору вин та їх поєднання з їжею. На сайті є:\n\n- база даних з найпопулярніших вин світу;\n- зручний інтерфейс;\n- реєстрація для зручного збереження обраних вин;\n- історична довідка про виготовлення та особливості вин;\n- пошук, який дозволяє швидко отримати інформацію про будь-яке вино;\n\nСайт орієнтований як на новачків, так і на досвідчених поціновувачів вина, надаючи зручний інтерфейс та корисні інструменти для вибору ідеального вина для будь-якої нагоди.")
         elif message.text == 'Назад':
             markup = telebot.types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
             project_online_sommilie_button = telebot.types.KeyboardButton('Онлайн Сомільє')
