@@ -169,12 +169,12 @@ def favorite(request, pk, site):
 
     # Handle redirection based on the cleaned URLs
     if len(urls) == 1 and urls[0]:
-        return redirect('program_web:' + urls[0])
+        return redirect('program_web:' + urls[-1])
     elif len(urls) == 2:
         return redirect('program_web:search')
 
     # Default fallback if the site parameter is not as expected
-    return redirect('program_web:index')  # Adjust as necessary
+    return redirect('program_web:search')  # Adjust as necessary
 
 
 """
