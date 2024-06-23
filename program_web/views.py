@@ -156,6 +156,7 @@ def favorite(request, pk, site):
     else:
         user_id = 0
     Favourites.objects.create(user_id=user_id, bottle=bottle)
+    print(site)
     urls = site.strip('/').split('/')
     if len(urls) == 1 and urls[0]:
         return redirect('program_web:' + urls[-1])
