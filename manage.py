@@ -3,9 +3,7 @@
 import os
 import sys
 
-
 def main():
-    """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Sommelier_Online_Project.settings')
     try:
         from django.core.management import execute_from_command_line
@@ -15,8 +13,15 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
-    execute_from_command_line(sys.argv)
 
+    # Check if the command is to run the Telegram bot
+    if len(sys.argv) > 1 and sys.argv[1] == 'program_tg':
+        from program_web.management.commands.program_tg import Command as TelegramBotCommand
+        bot_command = TelegramBotCommand()
+        bot_command.handle()
+    else:
+        execute_from_command_line(sys.argv)
 
 if __name__ == '__main__':
     main()
+
