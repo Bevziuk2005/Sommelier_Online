@@ -147,7 +147,7 @@ def search(request):
 
     return render(request, 'program_web/search.html', {'form': form, 'results': results, 'dicts': dicts})
 
-
+"""
 @require_POST
 def favorite(request, pk, site):
     bottle = get_object_or_404(Bottle, pk=pk)
@@ -156,14 +156,20 @@ def favorite(request, pk, site):
     else:
         user_id = 0
     Favourites.objects.create(user_id=user_id, bottle=bottle)
-    print(site)
     urls = site.strip('/').split('/')
     if len(urls) == 1 and urls[0]:
         return redirect('program_web:' + urls[-1])
     elif len(urls) == 2:
         return redirect('program_web:search')
-
-
+"""
+def favorite(request, pk, site):
+    bottle = Bottle.objects.get(pk=pk)
+    Favourites.objects.create(user=request.user, bottle=bottle)
+    urls = site.split('/')
+    url = [url for url in urls if url != '']
+    if len(url) == 2:
+        return redirect('program_web:search')
+    return redirect('program_web:'+urls[-1])
 
 def user_favorites(request):
     favorites = Favourites.objects.filter(user=request.user)
