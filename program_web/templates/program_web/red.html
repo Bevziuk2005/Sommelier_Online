@@ -44,7 +44,7 @@
                 <div class="card-header">
                     <h4>{{ bottle.name_ua }} ( {{ bottle.name_eng }} )</h4>
                     {% if user.is_authenticated %}
-                        {% if bottle.pk in dicts and dicts[bottle.pk] %}
+                        {% if bottle.pk in dicts and dicts %}
                             <div class="in_favorite">Додано</div>
                         {% else %}
                             <button class="add">
@@ -62,6 +62,7 @@
             </div>
         </div>
     {% endfor %}
+
 
 
 {% endblock %}
