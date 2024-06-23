@@ -151,14 +151,13 @@ def search(request):
             Q(taste__icontains=query)
         )
 
-        if request.user.is_authenticated:
-            favorites = Favourites.objects.filter(user=request.user)
-            favorite_pk = [favorite.bottle.pk for favorite in favorites]
-        else:
-            favorite_pk = []
+        favorites = Favourites.objects.filter(user=request.user)
+        bottles_pk = [bottle.pk for bottle in results]
+        favorite_pk = [favorite.bottle.pk for favorite in favorites]
 
-        for bottle in results:
-            dicts[bottle.pk] = bottle.pk in favorite_pk
+        for i in bottles_pk:
+            if i in favorite_pk:
+                dicts[i] = True
 
     return render(request, 'program_web/search.html', {'form': form, 'results': results, 'dicts': dicts})
 
