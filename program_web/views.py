@@ -123,8 +123,30 @@ class Favorites(View):
 """
                         General Function
 """
+def search(request):
+    form = SearchForm(request.POST or None)
+    results = []
+    dicts = dict()
 
+    if request.method == 'POST' and form.is_valid():
+        query = form.cleaned_data['query']
+        results = Bottle.objects.filter(
+            Q(name_ua__icontains=query) |
+            Q(name_eng__icontains=query) |
+            Q(taste__icontains=query)
+        )
 
+        if request.user.is_authenticated:
+            favorites = Favourites.objects.filter(user=request.user)
+            favorite_pk = [favorite.bottle.pk for favorite in favorites]
+        else:
+            favorite_pk = []
+
+        for bottle in results:
+            dicts[bottle.pk] = bottle.pk in favorite_pk
+
+    return render(request, 'program_web/search.html', {'form': form, 'results': results, 'dicts': dicts})
+"""
 def search(request):
     form = SearchForm(request.POST or None)
     results = []
@@ -148,7 +170,7 @@ def search(request):
 
     return render(request, 'program_web/search.html', {'form': form, 'results': results, 'dicts': dicts})
 
-
+"""
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from .models import Bottle, Favourites
