@@ -38,31 +38,33 @@
 
     </div>
 
-    {% for bottle in bottles %}
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-header">
-                    <h4>{{ bottle.name_ua }} ( {{ bottle.name_eng }} )</h4>
-                    {% if user.is_authenticated %}
-                        {% if bottle.pk in dicts %}
-                            <div class="in_favorite">Додано</div>
-                        {% else %}
-                            <button class="add">
-                                <a href="{% url 'program_web:favorite' bottle.pk request.build_absolute_uri %}">Додати</a>
-                            </button>
-                        {% endif %}
-                    {% endif %}
+    <div class="container">
+        <div class="row">
+            {% for bottle in bottles %}
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>{{ bottle.name_ua }} ( {{ bottle.name_eng }} )</h4>
+                            {% if user.is_authenticated %}
+                                {% if bottle.pk in dicts %}
+                                    <div class="in_favorite">Додано</div>
+                                {% else %}
+                                    <button class="add">
+                                        <a href="{% url 'program_web:favorite' bottle.pk request.build_absolute_uri %}">Додати</a>
+                                    </button>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+
+                        <div class="card-body">
+                            <p><b>Країна: </b>{{ bottle.country }}</p>
+                            <p><b>Домінуючі ноти: </b>{{ bottle.dominant_notes }}</p>
+                            <p><b>Ідеально поєднується з:</b> {{ bottle.taste }}</p>
+                        </div>
+                    </div>
                 </div>
-    
-                <div class="card-body">
-                    <p><b>Країна: </b>{{ bottle.country }}</p>
-                    <p><b>Домінуючі ноти: </b>{{ bottle.dominant_notes }}</p>
-                    <p><b>Ідеально поєднується з:</b> {{ bottle.taste }}</p>
-                </div>
-            </div>
+            {% endfor %}
         </div>
-    {% endfor %}
-
-
+    </div>
 
 {% endblock %}
