@@ -103,7 +103,7 @@ class Sparkling(View):
         dicts = {bottle.pk: (bottle.pk in favorite_pk_set) for bottle in self.bottles}
         return render(request, 'program_web/sparkling.html', {'bottles': self.bottles, 'dicts': dicts})
 
-
+"""
 class Red(View):
     bottles = Bottle.objects.filter(kind="червоне")
     def get(self, request):
@@ -115,7 +115,19 @@ class Red(View):
         dicts = {bottle.pk: (bottle.pk in favorite_pk_set) for bottle in self.bottles}
         return render(request, 'program_web/red.html', {'bottles': self.bottles, 'dicts': dicts})
 
+"""
 
+class Red(View):
+    bottles = Bottle.objects.filter(kind="червоне")
+    def get(self, request):
+        favorites = Favourites.objects.filter(user=request.user)
+        dicts = dict()
+        bottles_pk = [bottle.pk for bottle in self.bottles]
+        favorite_pk = [favorite.bottle.pk for favorite in favorites]
+        for i in bottles_pk:
+            if i in favorite_pk:
+                dicts[i] = True
+        return render(request, 'program_web/red.html', {'bottles': self.bottles, 'dicts': dicts})
 class Favorites(View):
     def get(self, request):
         return render(request, 'program_web/favorites.html')
