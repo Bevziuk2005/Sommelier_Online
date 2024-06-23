@@ -149,6 +149,35 @@ def search(request):
     return render(request, 'program_web/search.html', {'form': form, 'results': results, 'dicts': dicts})
 
 
+from django.shortcuts import get_object_or_404, redirect
+from django.views.decorators.http import require_POST
+from .models import Bottle, Favourites
+
+
+@require_POST
+def favorite(request, pk, site):
+    bottle = get_object_or_404(Bottle, pk=pk)
+    if request.user.is_authenticated:
+        user_id = request.user.id
+    else:
+        user_id = 0
+
+    Favourites.objects.create(user_id=user_id, bottle=bottle)
+
+    # Ensure the site parameter is cleaned up
+    urls = site.strip('/').split('/')
+
+    # Handle redirection based on the cleaned URLs
+    if len(urls) == 1 and urls[0]:
+        return redirect('program_web:' + urls[0])
+    elif len(urls) == 2:
+        return redirect('program_web:search')
+
+    # Default fallback if the site parameter is not as expected
+    return redirect('program_web:index')  # Adjust as necessary
+
+
+"""
 @require_POST
 def favorite(request, pk, site):
     bottle = get_object_or_404(Bottle, pk=pk)
@@ -162,7 +191,7 @@ def favorite(request, pk, site):
     if len(url) == 2:
         return redirect('program_web:search')
     return redirect('program_web:' + urls[-1])
-
+"""
 def user_favorites(request):
     favorites = Favourites.objects.filter(user=request.user)
     bottles = [fav.bottle for fav in favorites]
