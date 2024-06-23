@@ -146,34 +146,6 @@ def search(request):
             dicts[bottle.pk] = bottle.pk in favorite_pk
 
     return render(request, 'program_web/search.html', {'form': form, 'results': results, 'dicts': dicts})
-"""
-def search(request):
-    form = SearchForm(request.POST or None)
-    results = []
-    dicts = dict()
-
-    if request.method == 'POST' and form.is_valid():
-        query = form.cleaned_data['query']
-        results = Bottle.objects.filter(
-            Q(name_ua__icontains=query) |
-            Q(name_eng__icontains=query) |
-            Q(taste__icontains=query)
-        )
-
-        favorites = Favourites.objects.filter(user=request.user)
-        bottles_pk = [bottle.pk for bottle in results]
-        favorite_pk = [favorite.bottle.pk for favorite in favorites]
-
-        for i in bottles_pk:
-            if i in favorite_pk:
-                dicts[i] = True
-
-    return render(request, 'program_web/search.html', {'form': form, 'results': results, 'dicts': dicts})
-
-"""
-from django.shortcuts import get_object_or_404, redirect
-from django.views.decorators.http import require_POST
-from .models import Bottle, Favourites
 
 
 @require_POST
@@ -199,21 +171,6 @@ def favorite(request, pk, site):
     return redirect('program_web:search')  # Adjust as necessary
 
 
-"""
-@require_POST
-def favorite(request, pk, site):
-    bottle = get_object_or_404(Bottle, pk=pk)
-    if request.user.is_authenticated:
-        user_id = request.user.id
-    else:
-        user_id = 0
-    Favourites.objects.create(user_id=user_id, bottle=bottle)
-    urls = site.split('/')
-    url = [url for url in urls if url != '']
-    if len(url) == 2:
-        return redirect('program_web:search')
-    return redirect('program_web:' + urls[-1])
-"""
 def user_favorites(request):
     favorites = Favourites.objects.filter(user=request.user)
     bottles = [fav.bottle for fav in favorites]
