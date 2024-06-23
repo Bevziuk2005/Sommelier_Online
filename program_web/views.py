@@ -7,7 +7,8 @@ from django.shortcuts import render, redirect
 from .forms import LoginForm, SignupForm
 from .forms import SearchForm
 from django.db.models import Q
-
+from django.shortcuts import get_object_or_404, redirect
+from django.views.decorators.http import require_POST
 
 """
                     Authorisation System
@@ -65,13 +66,12 @@ def registration(request):
 class White(View):
     bottles = Bottle.objects.filter(kind="біле")
     def get(self, request):
-        favorites = Favourites.objects.filter(user=request.user)
-        dicts = dict()
-        bottles_pk = [bottle.pk for bottle in self.bottles]
-        favorite_pk = [favorite.bottle.pk for favorite in favorites]
-        for i in bottles_pk:
-            if i in favorite_pk:
-                dicts[i] = True
+        if request.user.is_authenticated:
+            favorites = Favourites.objects.filter(user=request.user)
+            favorite_pk_set = set(favorite.bottle.pk for favorite in favorites)
+        else:
+            favorite_pk_set = set()
+        dicts = {bottle.pk: (bottle.pk in favorite_pk_set) for bottle in self.bottles}
         return render(request, 'program_web/white.html', {'bottles': self.bottles, 'dicts': dicts})
 
 
@@ -83,62 +83,37 @@ class Rose(View):
 class Dessert(View):
     bottles = Bottle.objects.filter(kind="десертне")
     def get(self, request):
-        favorites = Favourites.objects.filter(user=request.user)
-        dicts = dict()
-        bottles_pk = [bottle.pk for bottle in self.bottles]
-        favorite_pk = [favorite.bottle.pk for favorite in favorites]
-        for i in bottles_pk:
-            if i in favorite_pk:
-                dicts[i] = True
+        if request.user.is_authenticated:
+            favorites = Favourites.objects.filter(user=request.user)
+            favorite_pk_set = set(favorite.bottle.pk for favorite in favorites)
+        else:
+            favorite_pk_set = set()
+        dicts = {bottle.pk: (bottle.pk in favorite_pk_set) for bottle in self.bottles}
         return render(request, 'program_web/dessert.html', {'bottles': self.bottles, 'dicts': dicts})
 
 
 class Sparkling(View):
     bottles = Bottle.objects.filter(kind="ігристе")
     def get(self, request):
-        favorites = Favourites.objects.filter(user=request.user)
-        dicts = dict()
-        bottles_pk = [bottle.pk for bottle in self.bottles]
-        favorite_pk = [favorite.bottle.pk for favorite in favorites]
-        for i in bottles_pk:
-            if i in favorite_pk:
-                dicts[i] = True
-        return render(request, 'program_web/sparkling.html', {'bottles': self.bottles, 'dicts': dicts})
-
-"""
-class Red(View):
-    bottles = Bottle.objects.filter(kind="червоне")
-    def get(self, request):
-        favorites = Favourites.objects.filter(user=request.user)
-        dicts = dict()
-        bottles_pk = [bottle.pk for bottle in self.bottles]
-        favorite_pk = [favorite.bottle.pk for favorite in favorites]
-        for i in bottles_pk:
-            if i in favorite_pk:
-                dicts[i] = True
-        return render(request, 'program_web/red.html', {'bottles': self.bottles, 'dicts': dicts})
-"""
-from django.views import View
-from django.shortcuts import render
-from .models import Bottle, Favourites
-
-
-class Red(View):
-    def get(self, request):
-        # Query bottles of kind "червоне"
-        bottles = Bottle.objects.filter(kind="червоне")
-
-        # Get user favorites
         if request.user.is_authenticated:
             favorites = Favourites.objects.filter(user=request.user)
             favorite_pk_set = set(favorite.bottle.pk for favorite in favorites)
         else:
-            favorite_pk_set = set()  # Empty set for anonymous user
+            favorite_pk_set = set()
+        dicts = {bottle.pk: (bottle.pk in favorite_pk_set) for bottle in self.bottles}
+        return render(request, 'program_web/sparkling.html', {'bottles': self.bottles, 'dicts': dicts})
 
-        # Create a dictionary to mark favorites
-        dicts = {bottle.pk: (bottle.pk in favorite_pk_set) for bottle in bottles}
 
-        return render(request, 'program_web/red.html', {'bottles': bottles, 'dicts': dicts})
+class Red(View):
+    bottles = Bottle.objects.filter(kind="червоне")
+    def get(self, request):
+        if request.user.is_authenticated:
+            favorites = Favourites.objects.filter(user=request.user)
+            favorite_pk_set = set(favorite.bottle.pk for favorite in favorites)
+        else:
+            favorite_pk_set = set()
+        dicts = {bottle.pk: (bottle.pk in favorite_pk_set) for bottle in self.bottles}
+        return render(request, 'program_web/red.html', {'bottles': self.bottles, 'dicts': dicts})
 
 
 class Favorites(View):
@@ -173,49 +148,20 @@ def search(request):
 
     return render(request, 'program_web/search.html', {'form': form, 'results': results, 'dicts': dicts})
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect
-from django.views.decorators.http import require_http_methods
 
-from django.shortcuts import get_object_or_404, redirect
-from django.views.decorators.http import require_POST
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import AnonymousUser
-
-
-@login_required
-@require_POST  # Ensure only POST requests are accepted
+@require_POST
 def favorite(request, pk, site):
     bottle = get_object_or_404(Bottle, pk=pk)
-
-    # Determine user_id based on authentication status
     if request.user.is_authenticated:
         user_id = request.user.id
     else:
-        # If user is anonymous, assign a default value (e.g., 0)
         user_id = 0
-
-    # Create Favourites object with determined user_id
     Favourites.objects.create(user_id=user_id, bottle=bottle)
-
-    # Handle redirection based on 'site' parameter
     urls = site.split('/')
     url = [url for url in urls if url != '']
     if len(url) == 2:
         return redirect('program_web:search')
     return redirect('program_web:' + urls[-1])
-
-
-"""
-def favorite(request, pk, site):
-    bottle = Bottle.objects.get(pk=pk)
-    Favourites.objects.create(user=request.user, bottle=bottle)
-    urls = site.split('/')
-    url = [url for url in urls if url != '']
-    if len(url) == 2:
-        return redirect('program_web:search')
-    return redirect('program_web:'+urls[-1])
-"""
 
 def user_favorites(request):
     favorites = Favourites.objects.filter(user=request.user)
