@@ -155,20 +155,13 @@ def favorite(request, pk, site):
         user_id = request.user.id
     else:
         user_id = 0
-
     Favourites.objects.create(user_id=user_id, bottle=bottle)
-
-    # Ensure the site parameter is cleaned up
     urls = site.strip('/').split('/')
-
-    # Handle redirection based on the cleaned URLs
     if len(urls) == 1 and urls[0]:
         return redirect('program_web:' + urls[-1])
     elif len(urls) == 2:
         return redirect('program_web:search')
 
-    # Default fallback if the site parameter is not as expected
-    return redirect('program_web:search')  # Adjust as necessary
 
 
 def user_favorites(request):
