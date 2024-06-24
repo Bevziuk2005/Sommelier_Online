@@ -63,16 +63,13 @@ def registration(request):
 class White(View):
     bottles = Bottle.objects.filter(kind="біле")
     def get(self, request):
-        dicts = {}
+        favorites = Favourites.objects.filter(user=request.user)
+        dicts = dict()
         bottles_pk = [bottle.pk for bottle in self.bottles]
-
-        if not isinstance(request.user, AnonymousUser):
-            favorites = Favourites.objects.filter(user=request.user)
-            favorite_pk = [favorite.bottle.pk for favorite in favorites]
-
-            for pk in bottles_pk:
-                dicts[pk] = pk in favorite_pk
-
+        favorite_pk = [favorite.bottle.pk for favorite in favorites]
+        for i in bottles_pk:
+            if i in favorite_pk:
+                dicts[i] = True
         return render(request, 'program_web/white.html', {'bottles': self.bottles, 'dicts': dicts})
 
 class Rose(View):
@@ -82,33 +79,27 @@ class Rose(View):
 class Dessert(View):
     bottles = Bottle.objects.filter(kind="десертне")
     def get(self, request):
-        dicts = {}
+        favorites = Favourites.objects.filter(user=request.user)
+        dicts = dict()
         bottles_pk = [bottle.pk for bottle in self.bottles]
-
-        if not isinstance(request.user, AnonymousUser):
-            favorites = Favourites.objects.filter(user=request.user)
-            favorite_pk = [favorite.bottle.pk for favorite in favorites]
-
-            for pk in bottles_pk:
-                dicts[pk] = pk in favorite_pk
-
+        favorite_pk = [favorite.bottle.pk for favorite in favorites]
+        for i in bottles_pk:
+            if i in favorite_pk:
+                dicts[i] = True
         return render(request, 'program_web/dessert.html', {'bottles': self.bottles, 'dicts': dicts})
 
 class Sparkling(View):
     bottles = Bottle.objects.filter(kind="ігристе")
     def get(self, request):
-        dicts = {}
+        favorites = Favourites.objects.filter(user=request.user)
+        dicts = dict()
         bottles_pk = [bottle.pk for bottle in self.bottles]
-
-        if not isinstance(request.user, AnonymousUser):
-            favorites = Favourites.objects.filter(user=request.user)
-            favorite_pk = [favorite.bottle.pk for favorite in favorites]
-
-            for pk in bottles_pk:
-                dicts[pk] = pk in favorite_pk
-
+        favorite_pk = [favorite.bottle.pk for favorite in favorites]
+        for i in bottles_pk:
+            if i in favorite_pk:
+                dicts[i] = True
         return render(request, 'program_web/sparkling.html', {'bottles': self.bottles, 'dicts': dicts})
-"""
+
 class Red(View):
     bottles = Bottle.objects.filter(kind="червоне")
     def get(self, request):
@@ -139,7 +130,7 @@ class Red(View):
 
         return render(request, 'program_web/red.html', {'bottles': self.bottles, 'dicts': dicts})
 
-
+"""
 class Favorites(View):
     def get(self, request):
         return render(request, 'program_web/favorites.html')
