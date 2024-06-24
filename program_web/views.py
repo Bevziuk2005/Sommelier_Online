@@ -7,6 +7,9 @@ from django.shortcuts import render, redirect
 from .forms import LoginForm, SignupForm
 from .forms import SearchForm
 from django.db.models import Q
+from django.shortcuts import render
+from django.views import View
+from django.contrib.auth.models import AnonymousUser
 
 """
                     Authorisation System
@@ -118,9 +121,6 @@ class Red(View):
                 dicts[i] = True
         return render(request, 'program_web/red.html', {'bottles': self.bottles, 'dicts': dicts})
 """
-from django.shortcuts import render
-from django.views import View
-from django.contrib.auth.models import AnonymousUser
 
 
 class Red(View):
