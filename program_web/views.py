@@ -96,7 +96,7 @@ class Sparkling(View):
             if i in favorite_pk:
                 dicts[i] = True
         return render(request, 'program_web/sparkling.html', {'bottles': self.bottles, 'dicts': dicts})
-
+"""
 class Red(View):
     bottles = Bottle.objects.filter(kind="червоне")
     def get(self, request):
@@ -108,6 +108,28 @@ class Red(View):
             if i in favorite_pk:
                 dicts[i] = True
         return render(request, 'program_web/red.html', {'bottles': self.bottles, 'dicts': dicts})
+"""
+from django.shortcuts import render
+from django.views import View
+from django.contrib.auth.models import AnonymousUser
+
+
+class Red(View):
+    bottles = Bottle.objects.filter(kind="червоне")
+
+    def get(self, request):
+        dicts = {}
+        bottles_pk = [bottle.pk for bottle in self.bottles]
+
+        if not isinstance(request.user, AnonymousUser):
+            favorites = Favourites.objects.filter(user=request.user)
+            favorite_pk = [favorite.bottle.pk for favorite in favorites]
+
+            for pk in bottles_pk:
+                dicts[pk] = pk in favorite_pk
+
+        return render(request, 'program_web/red.html', {'bottles': self.bottles, 'dicts': dicts})
+
 
 class Favorites(View):
     def get(self, request):
