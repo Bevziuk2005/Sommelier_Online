@@ -9,7 +9,7 @@ from .forms import SearchForm
 from django.db.models import Q
 from django.shortcuts import render
 from django.views import View
-from django.contrib.auth.models import AnonymousUser
+
 
 """
                     Authorisation System
@@ -129,11 +129,12 @@ class Favorites(View):
 """
                         General Function
 """
+
+
 def search(request):
     form = SearchForm(request.POST or None)
     results = []
-    dicts = dict()
-
+    dicts = {}
     if request.method == 'POST' and form.is_valid():
         query = form.cleaned_data['query']
         results = Bottle.objects.filter(
@@ -142,15 +143,16 @@ def search(request):
             Q(taste__icontains=query)
         )
 
-        favorites = Favourites.objects.filter(user=request.user)
-        bottles_pk = [bottle.pk for bottle in results]
-        favorite_pk = [favorite.bottle.pk for favorite in favorites]
-
-        for i in bottles_pk:
-            if i in favorite_pk:
-                dicts[i] = True
+        if request.user.is_authenticated:
+            favorites = Favourites.objects.filter(user=request.user)
+            bottles_pk = [bottle.pk for bottle in results]
+            favorite_pk = [favorite.bottle.pk for favorite in favorites]
+            for i in bottles_pk:
+                if i in favorite_pk:
+                    dicts[i] = True
 
     return render(request, 'program_web/search.html', {'form': form, 'results': results, 'dicts': dicts})
+
 
 def favorite(request, pk, site):
     bottle = Bottle.objects.get(pk=pk)
