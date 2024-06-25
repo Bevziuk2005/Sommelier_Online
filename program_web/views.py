@@ -72,12 +72,12 @@ class White(View):
             for i in bottles_pk:
                 if i in favorite_pk:
                     dicts[i] = True
-        return render(request, 'program_web\white.html', {'bottles': self.bottles, 'dicts': dicts})
+        return render(request, 'program_web/white.html', {'bottles': self.bottles, 'dicts': dicts})
 
 
 class Rose(View):
     def get(self, request):
-        return render(request, 'program_web\\rose.html')
+        return render(request, 'program_web/rose.html')
 
 
 class Dessert(View):
@@ -91,7 +91,7 @@ class Dessert(View):
             for i in bottles_pk:
                 if i in favorite_pk:
                     dicts[i] = True
-        return render(request, 'program_web\dessert.html', {'bottles': self.bottles, 'dicts': dicts})
+        return render(request, 'program_web/dessert.html', {'bottles': self.bottles, 'dicts': dicts})
 
 
 class Sparkling(View):
@@ -105,7 +105,7 @@ class Sparkling(View):
             for i in bottles_pk:
                 if i in favorite_pk:
                     dicts[i] = True
-        return render(request, 'program_web\sparkling.html', {'bottles': self.bottles, 'dicts': dicts})
+        return render(request, 'program_web/sparkling.html', {'bottles': self.bottles, 'dicts': dicts})
 
 
 class Red(View):
