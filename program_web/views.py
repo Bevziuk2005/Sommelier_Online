@@ -60,77 +60,68 @@ def registration(request):
                         Personal page for wine
 """
 
+
 class White(View):
     bottles = Bottle.objects.filter(kind="біле")
     def get(self, request):
-        favorites = Favourites.objects.filter(user=request.user)
-        dicts = dict()
-        bottles_pk = [bottle.pk for bottle in self.bottles]
-        favorite_pk = [favorite.bottle.pk for favorite in favorites]
-        for i in bottles_pk:
-            if i in favorite_pk:
-                dicts[i] = True
-        return render(request, 'program_web/white.html', {'bottles': self.bottles, 'dicts': dicts})
+        dicts = {}
+        if request.user.is_authenticated:
+            favorites = Favourites.objects.filter(user=request.user)
+            bottles_pk = [bottle.pk for bottle in self.bottles]
+            favorite_pk = [favorite.bottle.pk for favorite in favorites]
+            for i in bottles_pk:
+                if i in favorite_pk:
+                    dicts[i] = True
+        return render(request, 'program_web\white.html', {'bottles': self.bottles, 'dicts': dicts})
+
 
 class Rose(View):
     def get(self, request):
-        return render(request, 'program_web/rose.html')
+        return render(request, 'program_web\\rose.html')
+
 
 class Dessert(View):
     bottles = Bottle.objects.filter(kind="десертне")
     def get(self, request):
-        favorites = Favourites.objects.filter(user=request.user)
-        dicts = dict()
-        bottles_pk = [bottle.pk for bottle in self.bottles]
-        favorite_pk = [favorite.bottle.pk for favorite in favorites]
-        for i in bottles_pk:
-            if i in favorite_pk:
-                dicts[i] = True
-        return render(request, 'program_web/dessert.html', {'bottles': self.bottles, 'dicts': dicts})
+        dicts = {}
+        if request.user.is_authenticated:
+            favorites = Favourites.objects.filter(user=request.user)
+            bottles_pk = [bottle.pk for bottle in self.bottles]
+            favorite_pk = [favorite.bottle.pk for favorite in favorites]
+            for i in bottles_pk:
+                if i in favorite_pk:
+                    dicts[i] = True
+        return render(request, 'program_web\dessert.html', {'bottles': self.bottles, 'dicts': dicts})
+
 
 class Sparkling(View):
     bottles = Bottle.objects.filter(kind="ігристе")
     def get(self, request):
-        favorites = Favourites.objects.filter(user=request.user)
-        dicts = dict()
-        bottles_pk = [bottle.pk for bottle in self.bottles]
-        favorite_pk = [favorite.bottle.pk for favorite in favorites]
-        for i in bottles_pk:
-            if i in favorite_pk:
-                dicts[i] = True
-        return render(request, 'program_web/sparkling.html', {'bottles': self.bottles, 'dicts': dicts})
-
-class Red(View):
-    bottles = Bottle.objects.filter(kind="червоне")
-    def get(self, request):
-        favorites = Favourites.objects.filter(user=request.user)
-        dicts = dict()
-        bottles_pk = [bottle.pk for bottle in self.bottles]
-        favorite_pk = [favorite.bottle.pk for favorite in favorites]
-        for i in bottles_pk:
-            if i in favorite_pk:
-                dicts[i] = True
-        return render(request, 'program_web/red.html', {'bottles': self.bottles, 'dicts': dicts})
-"""
+        dicts = {}
+        if request.user.is_authenticated:
+            favorites = Favourites.objects.filter(user=request.user)
+            bottles_pk = [bottle.pk for bottle in self.bottles]
+            favorite_pk = [favorite.bottle.pk for favorite in favorites]
+            for i in bottles_pk:
+                if i in favorite_pk:
+                    dicts[i] = True
+        return render(request, 'program_web\sparkling.html', {'bottles': self.bottles, 'dicts': dicts})
 
 
 class Red(View):
     bottles = Bottle.objects.filter(kind="червоне")
-
     def get(self, request):
         dicts = {}
-        bottles_pk = [bottle.pk for bottle in self.bottles]
-
-        if not isinstance(request.user, AnonymousUser):
+        if request.user.is_authenticated:
             favorites = Favourites.objects.filter(user=request.user)
+            bottles_pk = [bottle.pk for bottle in self.bottles]
             favorite_pk = [favorite.bottle.pk for favorite in favorites]
-
-            for pk in bottles_pk:
-                dicts[pk] = pk in favorite_pk
-
+            for i in bottles_pk:
+                if i in favorite_pk:
+                    dicts[i] = True
         return render(request, 'program_web/red.html', {'bottles': self.bottles, 'dicts': dicts})
 
-"""
+
 class Favorites(View):
     def get(self, request):
         return render(request, 'program_web/favorites.html')
