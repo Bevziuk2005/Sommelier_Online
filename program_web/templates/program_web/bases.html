@@ -13,12 +13,8 @@
     .navbar-nav {
         display: flex;
         align-items: center;
-    }
-
-    .navbar-brand img {
-        width: 10%;
-        height: auto;
-        margin-left: 10px;
+        width: 100%;
+        justify-content: space-between;
     }
 
     .button-bar, input {
@@ -60,70 +56,74 @@
         flex-direction: column;
     }
 
+    .nav-left, .nav-right {
+        display: flex;
+        align-items: center;
+    }
 
+    .nav-left {
+        margin-right: auto;
+        padding-left: 55px;
+    }
+
+    .nav-right {
+        margin-left: auto;
+        padding-right: 55px;
+    }
 </style>
 {% endblock %}
 {% block header %}
 <nav class="navbar navbar-expand-sm">
   <div class="container-fluid">
-    <ul class="navbar-nav mx-auto my-auto d-flex align-items-center">
+    <div class="nav-left">
+      <ul class="navbar-nav d-flex align-items-center">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'program_web:search' %}"><button class="button-bar">Головна</button><span class="sr-only"></span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'program_web:red' %}"><button class="button-bar">Червоне</button></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'program_web:rose' %}"><button class="button-bar">Рожеве</button></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'program_web:white' %}"><button class="button-bar">Біле</button></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'program_web:sparkling' %}"><button class="button-bar">Ігристі</button></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'program_web:dessert' %}"><button class="button-bar">Десертні</button></a>
+        </li>
+      </ul>
+    </div>
 
-     <li class="nav-item">
-        <a class="nav-link"  href="{% url 'program_web:search' %}"><button class="button-bar">Головна</button><span class="sr-only"></span></a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link"  href="{% url 'program_web:red' %}"><button class="button-bar">Червоне</button></a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link"  href="{% url 'program_web:rose' %}"><button class="button-bar">Рожеве</button></a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link"  href="{% url 'program_web:white' %}"><button class="button-bar">Біле</button></a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link"  href="{% url 'program_web:sparkling' %}"><button class="button-bar">Ігристі</button></a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link"  href="{% url 'program_web:dessert' %}"><button class="button-bar">Десертні</button></a>
-      </li>
-
-      <li class="nav-item"> 
-        <a class="navbar-brand" href="https://t.me/sommelier_online_bot">
-            <!-- <img  src="{% static 'program_web/png/tg.png' %} " style="width: 10%" alt="Avatar Logo" class="rounded-pill">-->
-        </a>
-      </li>
-
-
-    {% if user.is_authenticated %}
-      <li class="nav-item">
-        <a class="nav-link"  href="{% url 'program_web:favorites' %}"><button class="button-bar">Обране</button></a>
-      </li>
-      <li class="nav-item" id="name">
-         <a class="nav-link" style="color: #FEE6E6">{{ user.username }}</a>
-      </li>
-      <li class="nav-item">
-         <a class="nav-link" href="{% url 'program_web:logout' %}" ><button class="button-bar">Вихід</button></a>
-      </li>
-    {% else %}
-      <li class="nav-item">
-         <a class="nav-link" href="{% url 'program_web:open' %}" ><button class="button-bar">Вхід</button></a>
-      </li>
-    {% endif %}
-    </ul>
-
+    <div class="nav-right">
+      <ul class="navbar-nav d-flex align-items-center">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'program_web:favorites' %}"><button class="button-bar">Обране</button></a>
+          </li>
+          <li class="nav-item" id="name">
+            <a class="nav-link" style="color: #FEE6E6">{{ user.username }}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'program_web:logout' %}"><button class="button-bar">Вихід</button></a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'program_web:open' %}"><button class="button-bar">Вхід</button></a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
   </div>
 </nav>
 {% endblock %}
 
 <div class="ml-7 mr-7">
-    <div class="deep_color">
-        {% block content %}
-
-        {% endblock %}
-    </div>
+  <div class="deep_color">
+    {% block content %}
+    {% endblock %}
+  </div>
 </div>
