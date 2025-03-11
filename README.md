@@ -7,11 +7,11 @@ Sommelier Online - це веб-додаток, створений для під�
 - **Backend**: Django, Django REST Framework
 - **Frontend**: HTML, CSS
 - **База даних**: PostgreSQL
-- 
+
 ## Відео-презентація
 Детальніше про проєкт можна дізнатися у відео-презентації:
 
-[![Переглянути на YouTube](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://youtu.be/CVPuStB3EuU)
+[![Переглянути на YouTube](https://img.youtube.com/vi/CVPuStB3EuU/0.jpg)](https://youtu.be/CVPuStB3EuU)
 
 ## Запуск проєкту
 ### Локальний запуск
